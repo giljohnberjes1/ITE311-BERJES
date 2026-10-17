@@ -52,11 +52,22 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Invalid email or password.',
         ]);
+
+           return redirect('/dashboard')->with('success', 'Welcome back!');
     }
 
     public function dashboard()
     {
-        return view('auth.dashboard');
+          $user = Auth::user();
+
+       if (!$user) {
+           return redirect('/login');
+       }
+
+       return view('auth.dashboard', [
+           'user' => $user,
+           'role' => $user->role,
+       ]);
     }
 
     public function logout(Request $request)
